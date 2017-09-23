@@ -1,0 +1,206 @@
+<div class="landing-body">
+    <div class="landing-wrapper">
+        <div id="header">
+            <vn-nav></vn-nav>
+            <p-growl [value]="msgs"></p-growl>
+            <div class="header-content clearfix">
+                <div class="card ui-fluid vn-head-container">
+                    <div class="ui-g">
+                        <div class="ui-g-12 vn-head">
+                            <br>
+                            <img src="assets/layout/images/log.png">
+                            <h2 style="color: #fff;">Register a new account for your Place</h2>
+                        </div>
+                        <form novalidate (ngSubmit)="save()" [formGroup]="registrationForm" >
+                            <div class="ui-md-6 ui-g-12 vn-reg-content">
+                                <legend>Account Info:</legend>
+                                <br>
+                                <div class="ui-g-12">
+                                    <div class="ui-g-6">
+                                        <span class="md-inputfield">
+                                            <input type="text"
+                                                [ngClass]="{'ng-dirty ng-invalid': (registrationForm.get('firstname').touched || registrationForm.get('firstname').dirty) && registrationForm.get('firstname').errors }" 
+                                                formControlName="firstname" pInputText>
+                                            <label>Firstname</label>
+                                            <div *ngIf="(registrationForm.get('firstname')?.touched || registrationForm.get('firstname')?.dirty) && registrationForm.get('firstname')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                                Firstname is required
+                                            </div>
+                                            <div *ngIf="(registrationForm.get('firstname')?.touched || registrationForm.get('firstname')?.dirty) && registrationForm.get('firstname')?.errors?.minlength" class="ui-message ui-messages-error ui-corner-all">
+                                                Firstname must be 3 characters and above
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <div class="ui-g-6">
+                                        <span class="md-inputfield">
+                                            <input type="text"
+                                                [ngClass]="{'ng-dirty ng-invalid': (registrationForm.get('lastname').touched || registrationForm.get('lastname').dirty) && registrationForm.get('lastname').errors }" 
+                                                formControlName="lastname" pInputText>
+                                            <label>Lastname</label>
+                                            <div *ngIf="(registrationForm.get('lastname')?.touched || registrationForm.get('lastname')?.dirty) && registrationForm.get('lastname')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                                Lastname is required
+                                            </div>
+                                            <div *ngIf="(registrationForm.get('lastname')?.touched || registrationForm.get('lastname')?.dirty) && registrationForm.get('lastname')?.errors?.minlength" class="ui-message ui-messages-error ui-corner-all">
+                                                Lastname must be 3 characters and above
+                                            </div>
+                                        </span>
+                                    </div>
+                                    
+                                    <br>
+                                </div>
+
+                                <div class="ui-g-12">
+                                    <span class="md-inputfield">
+                                        <input type="text" id="emailId" 
+                                        [ngClass]="{'ng-dirty ng-invalid': emailMessage }" 
+                                        formControlName="email" pInputText autocomplete="off">
+                                        <label>Email</label>
+                                        <div *ngIf="registrationForm.get('email').touched && emailMessage" class="ui-message ui-messages-error ui-corner-all">
+                                            {{emailMessage}}
+                                        </div>
+                                    </span>
+                                    <br>
+                                </div>
+
+                                <div formGroupName="passwordGroup">
+
+                                    <div class="ui-g-12">
+                                        <span class="md-inputfield">
+                                            <input pPassword type="password" pInputText id="passwordId"
+                                            [ngClass]="{'ng-dirty ng-invalid': (registrationForm.get('passwordGroup.password').touched || registrationForm.get('passwordGroup.password').dirty) && registrationForm.get('passwordGroup.password')?.errors }" 
+                                            formControlName="password">
+                                            <label>Password</label>
+                                            <div *ngIf="(registrationForm.get('passwordGroup.password')?.touched || registrationForm.get('passwordGroup.password')?.dirty) && registrationForm.get('passwordGroup.password')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                                This field is required
+                                            </div>
+                                            <div *ngIf="(registrationForm.get('passwordGroup.password')?.touched || registrationForm.get('passwordGroup.password')?.dirty) && registrationForm.get('passwordGroup.password')?.errors?.minlength" class="ui-message ui-messages-error ui-corner-all">
+                                                Password should be atleast 6 characters
+                                            </div>
+                                        </span>
+                                        <br>
+                                    </div>
+
+                                    <div class="ui-g-12">
+                                        <span class="md-inputfield">
+                                            <input type="password" pInputText id="confirmPasswordId"
+                                            [ngClass]="{'ng-dirty ng-invalid': (registrationForm.get('passwordGroup.confirmPassword').touched || registrationForm.get('passwordGroup.confirmPassword').dirty) && (registrationForm.get('passwordGroup.confirmPassword')?.errors || registrationForm.get('passwordGroup')?.errors) }" 
+                                            formControlName="confirmPassword">
+                                            <label>Confirm Password</label>
+                                            <div *ngIf="(registrationForm.get('passwordGroup.confirmPassword')?.touched || registrationForm.get('passwordGroup.confirmPassword')?.dirty) && registrationForm.get('passwordGroup.confirmPassword')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                                This field is required
+                                            </div>
+                                            <div *ngIf="registrationForm.get('passwordGroup')?.errors?.match" class="ui-message ui-messages-error ui-corner-all">
+                                                Passwords didn't match
+                                            </div>
+                                        </span>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ui-md-6 ui-g-12 vn-reg-content">
+                                <legend>Venue Info:</legend>
+                                <br>
+                                <div style="border-left: 1px dashed gray !important;">
+                                    <div class="ui-g-12">
+                                        <span class="md-inputfield">
+                                            <input type="text" id="orgnameId" 
+                                                [ngClass]="{'ng-dirty ng-invalid': (registrationForm.get('orgname').touched || registrationForm.get('orgname').dirty) && registrationForm.get('orgname')?.errors }" 
+                                                formControlName="orgname" pInputText autocomplete="off">
+                                            <label>Organization / Company / Place (name / title)</label>
+                                            <div *ngIf="(registrationForm.get('orgname').touched || registrationForm.get('orgname').dirty) && registrationForm.get('orgname')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                                Organization / Company / Place  (name / title) is required
+                                            </div>
+                                        </span>
+                                        <br>
+                                    </div>
+
+                                    <div formGroupName="addressGroup">
+
+                                        <div class="ui-g-12">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText id="addstId"
+                                                [ngClass]="{'ng-dirty ng-invalid': (registrationForm.get('addressGroup.addst').touched || registrationForm.get('addressGroup.addst').dirty) && registrationForm.get('addressGroup.addst')?.errors }" 
+                                                formControlName="addst">
+                                                <label>Street / Home Address</label>
+                                                <div *ngIf="(registrationForm.get('addressGroup.addst').touched || registrationForm.get('addressGroup.addst').dirty) && registrationForm.get('addressGroup.addst')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                                    Street / Home Address is required
+                                                </div>
+                                            </span>
+                                            <br>
+                                        </div>
+
+                                        <div class="ui-g-12">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText id="addbrgyId"
+                                                [ngClass]="{'ng-dirty ng-invalid': (registrationForm.get('addressGroup.addbrgy').touched || registrationForm.get('addressGroup.addbrgy').dirty) && registrationForm.get('addressGroup.addbrgy')?.errors }" 
+                                                formControlName="addbrgy">
+                                                <label>Barangay</label>
+                                                <div *ngIf="(registrationForm.get('addressGroup.addbrgy').touched || registrationForm.get('addressGroup.addbrgy').dirty) && registrationForm.get('addressGroup.addbrgy')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                                    Barangay is required
+                                                </div>
+                                            </span>
+                                            <br>
+                                        </div>
+
+                                        <div class="ui-g-12">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText id="addcityId"
+                                                [ngClass]="{'ng-dirty ng-invalid': (registrationForm.get('addressGroup.addcity').touched || registrationForm.get('addressGroup.addcity').dirty) && registrationForm.get('addressGroup.addcity')?.errors }" 
+                                                formControlName="addcity">
+                                                <label>City / Municipality</label>
+                                                <div *ngIf="(registrationForm.get('addressGroup.addcity').touched || registrationForm.get('addressGroup.addcity').dirty) && registrationForm.get('addressGroup.addcity')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                                    City / Municipality is required
+                                                </div>
+                                            </span>
+                                            <br>
+                                        </div>
+
+                                        <div class="ui-g-12">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText id="addregionId"
+                                                [ngClass]="{'ng-dirty ng-invalid': (registrationForm.get('addressGroup.addregion').touched || registrationForm.get('addressGroup.addregion').dirty) && registrationForm.get('addressGroup.addregion')?.errors }" 
+                                                formControlName="addregion">
+                                                <label>Region</label>
+                                                <div *ngIf="(registrationForm.get('addressGroup.addregion').touched || registrationForm.get('addressGroup.addregion').dirty) && registrationForm.get('addressGroup.addregion')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                                Region is required
+                                                </div>
+                                            </span>
+                                            <br>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="ui-g-12">
+                                        <span class="md-inputfield">
+                                            <input type="text" id="full_addId" 
+                                                [ngClass]="{'ng-dirty ng-invalid': (registrationForm.get('full_add').touched || registrationForm.get('full_add').dirty) && registrationForm.get('full_add')?.errors }" 
+                                                formControlName="full_add" pInputText autocomplete="off">
+                                            <label>Organization / Company / Place Full Address</label>
+                                            <div *ngIf="(registrationForm.get('full_add').touched || registrationForm.get('full_add').dirty) && registrationForm.get('full_add')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                                Organization / Company / Place Full Address is required
+                                            </div>
+                                            <div *ngIf="(registrationForm.get('full_add').touched || registrationForm.get('full_add').dirty) && registrationForm.get('full_add')?.errors?.minlength" class="ui-message ui-messages-error ui-corner-all">
+                                                Organization / Company / Place Full Address must be 6 characters above
+                                            </div>
+                                        </span>
+                                        <br>
+                                    </div>                                
+                                </div>
+                            </div>
+                        <div class="ui-g-12">
+                            <button type="submit" pButton [disabled]="!registrationForm.valid" label="Register" icon="ui-icon-person"></button>
+                        </div>
+                        </form>
+                        <!-- <br>Dirty: {{ registrationForm.dirty }} 
+                        <br>Touched: {{ registrationForm.touched }}
+                        <br>Valid: {{ registrationForm.valid }}
+                        <br>Value: {{ registrationForm.value | json }} -->
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <vn-footer></vn-footer>
+    </div>
+</div>
+

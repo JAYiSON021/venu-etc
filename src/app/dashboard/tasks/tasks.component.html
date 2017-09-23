@@ -1,0 +1,64 @@
+<p-growl [value]="msgs"></p-growl>
+<div class="ui-g dashboard">
+    <div class="ui-g-12">
+        <div class="card card-w-title">
+            <h1>Tasks</h1>
+            <div class="ui-g">
+                <div class="ui-g-7 task-list">
+                    <div class="card">
+
+                        <div class="ui-fluid ui-g">
+                            <div class="ui-g-9">
+                                <div class="ui-inputgroup">
+                                    <input style="margin-top: 10px !important;" type="text" pInputText placeholder="What needs to be done?" [(ngModel)]="inputTask" >    
+                                </div>
+                            </div>
+                            <div class="ui-g-3">
+                                <button pButton type="button" (click)="_submitNewTask()" label="Add"></button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <p-panel header="Tasks">
+                        <ul>
+                            <li *ngFor="let task of _myTasks.tasks" style="padding: 10px !important;">
+                                <p-checkbox value="{{task._id}}" [(ngModel)]="doneTasks" (onChange)="isChange($event, task._id)" ></p-checkbox>
+                                <span class="task-name">{{task.body | slice:0:50}}<span *ngIf="task.body.length > 50">...</span> </span>
+                                <div style="float:right !important;">
+                                        <span (click)="editTaskInit(task._id, task.body)" style="color: #fff; cursor: pointer; background-color: #607D8B; padding: 5px !important; border-radius: 3px !important;">Edit</span>
+                                        <span (click)="deletetask(task._id)" style="color: #fff; cursor: pointer; background-color: #FF5722; padding: 5px !important; border-radius: 3px !important;">Delete</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </p-panel>
+                </div>
+
+                <div class="ui-g-5">
+                    <div class="card" *ngIf="taskDataLoaded">
+                        <div class="ui-fluid">
+                            <p-chart type="pie" [data]="taskData"></p-chart>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Edit Task" [(visible)]="editTaskDisplay" modal="modal" width="400" [responsive]="true">
+    <div class="ui-fluid">
+        <div class="ui-g">  
+            <div class="ui-g-12">
+                <div class="ui-inputgroup">
+                    <input style="margin-top: 10px !important;" type="text" pInputText [(ngModel)]="editTaskName" >    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <p-footer>
+        <button type="button" pButton icon="fa-check" (click)="saveEditedTask()" label="Save"></button>
+        <button type="button" pButton icon="fa-close" (click)="editTaskDisplay=false" label="Close"></button>
+    </p-footer>
+</p-dialog>

@@ -1,0 +1,33 @@
+.content-frm {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.vn-ui-message {
+    margin-top: 3px;
+    font-size: 0.95em;
+    color: gray !important;
+    border-style: none !important;
+}
+
+.vn-ui-message .material-icons {
+    font-size: 1em !important;
+    margin-top: 5px !important;
+}
+
+.card .tab1-card {
+    padding-top: 10px !important;
+}
+.vn-btn .orange-btn {
+    margin-left: -3px !important;
+}
+
+.vn-set-cost-head {
+    margin-bottom: 0px !important;
+    margin-top: 8px !important;
+}
+
+.vn-set-av-head {
+    margin-bottom: 0px !important;
+    margin-top: 8px !important;
+}

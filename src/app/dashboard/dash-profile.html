@@ -1,0 +1,58 @@
+<p-growl [value]="msgs"></p-growl>
+<div class="profile" [ngClass]="{'profile-expanded':active}">
+    <div *ngIf="vadminData.img_url=='default'; else hasImg">
+        <div class="profile-image">
+            <img src="assets/layout/images/default.png" width="60px" height="60px" style="border-radius: 50%;">
+        </div>
+    </div>
+    <ng-template #hasImg>
+        <div class="profile-image">
+            <img src="{{vadminPhoto}}" width="60px" height="60px" style="border-radius: 50%; object-fit: cover">
+        </div>
+    </ng-template>
+    <a href="#" (click)="onClick($event)">
+        <span class="profile-name">{{vadminData?.firstname}} {{vadminData?.lastname}}</span>
+        <i class="material-icons">keyboard_arrow_down</i>
+    </a>
+</div>
+
+<ul class="ultima-menu profile-menu" [@menu]="active ? 'visible' : 'hidden'">
+    <li role="menuitem">
+        <a [routerLink]="['vadmin']" class="ripplelink" [attr.tabindex]="!active ? '-1' : null">
+            <i class="material-icons">person</i>
+            <span>Profile</span>
+        </a>
+    </li>
+    <li role="menuitem">
+        <a (click)="displayCP=true" class="ripplelink" [attr.tabindex]="!active ? '-1' : null" style="cursor: pointer;">
+            <i class="material-icons">image</i>
+            <span>Change Picture</span>
+        </a>
+    </li>
+    <li role="menuitem">
+        <a (click)="display=true" class="ripplelink" [attr.tabindex]="!active ? '-1' : null" style="cursor: pointer;">
+            <i class="material-icons">power_settings_new</i>
+            <span>Logout</span>
+        </a>
+    </li>
+</ul>
+
+<p-dialog appendTo="body" header="Logout" [(visible)]="display" modal="modal" showEffect="fade" width="400">
+    <p>You are about to sign out on your portal, are you sure?</p>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa-close" (click)="display=false" label="No"></button>
+            <button type="button" pButton icon="fa-check" (click)="logout()" label="Yes"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog appendTo="body" header="Change Profile Picture" [(visible)]="displayCP" modal="modal" showEffect="fade" width="300">
+    <input type="file" (change)="fileChangeEvent($event)" placeholder="Upload file..." />
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa-close" (click)="displayCP=false" label="Cancel"></button>
+            <button [disabled]="!photo" pButton type="button" icon="fa-check" label="Upload" (click)="upload()"></button>
+        </div>
+    </p-footer>
+</p-dialog>

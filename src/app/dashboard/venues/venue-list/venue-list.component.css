@@ -1,0 +1,35 @@
+.vn-location {
+    margin-top: 5px;
+    color: gray;
+}
+
+.vn-name {
+    margin-bottom: 0px;
+}
+
+.card .vn-list-card {
+    padding: 0px !important;
+    padding-bottom: 0px !important;
+    margin-bottom: 2px !important;
+}
+
+.vn-img-thumb {
+    border-radius: 5%;
+    width: 100% !important;
+    height: 80px !important;
+    object-fit: cover !important;
+    margin-bottom: 0px !important;
+}
+
+.vn-link {
+    color: #4CAF50 !important;
+    cursor: pointer;
+}
+
+.vn-card-colored {
+    background-color: #888888 !important;
+}
+
+.vn-no-venue-ind {
+    color: #F7F7F7 !important;
+}

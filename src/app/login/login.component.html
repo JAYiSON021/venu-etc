@@ -1,0 +1,36 @@
+<div class="landing-body">
+        <div class="landing-wrapper">
+          <div id="header">
+              <vn-nav></vn-nav>
+              <p-growl [value]="msgs"></p-growl>
+              <div class="header-content clearfix">
+                  <div class="card login-panel ui-fluid">
+                      <div class="ui-g">
+                          <div class="ui-g-12">
+                              <img src="assets/layout/images/log.png">
+                          </div>
+                          
+                          <div class="ui-g-12">
+                              <span class="md-inputfield">
+                                  <input type="email" [(ngModel)]="model.email" pInputText autocomplete="off">
+                                  <label>Email</label>
+                              </span>
+                          </div>
+                          <div class="ui-g-12">
+                              <span class="md-inputfield">
+                                  <input type="password" [(ngModel)]="model.password" pInputText autocomplete="off">
+                                  <label>Password</label>
+                              </span>
+                          </div>
+                          <div class="ui-g-12">
+                              <button [disabled]="!model.email || !model.password" type="button" (click)="login()" pButton label="Log In" icon="ui-icon-person"></button>
+                              <button type="button" [routerLink]="['/register']" pButton label="Register" icon="ui-icon-assignment-return" class="secondary"></button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+         <vn-footer></vn-footer>
+      </div>
+</div>
+

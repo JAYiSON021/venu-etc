@@ -1,0 +1,266 @@
+<p-growl [value]="msgs"></p-growl>
+<div class="card card-w-title shadow-box ui-shadow-2">
+    <h1>Edit {{venue?.name}}</h1>
+    <form novalidate (ngSubmit)="save()" [formGroup]="editVenueForm">
+        <p-tabView>
+
+            <!-- Name, Capacity and; Location -->
+            <p-tabPanel formGroupName="tab1Group" header="Name, Capacity &amp; Location">
+                <div class="ui-g form-group content-frm">
+
+                    <!-- Venue Name/Title -->
+                    <div class="ui-g-12 ui-md-3">
+                        <div class="tab1-card">
+                            <span class="md-inputfield">
+                                <input type="text"
+                                    [ngClass]="{'ng-dirty ng-invalid': (editVenueForm.get('tab1Group.name').touched || editVenueForm.get('tab1Group.name').dirty) && editVenueForm.get('tab1Group.name').errors }"
+                                    formControlName="name" pInputText />
+                                <label>Venue Name/Title:</label>
+                                <div *ngIf="(editVenueForm.get('tab1Group.name')?.touched || editVenueForm.get('tab1Group.name')?.dirty) && editVenueForm.get('tab1Group.name')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                    Venue Name/Title is required
+                                </div>
+                                <div class="vn-ui-message">
+                                    <i class="material-icons">info</i><small> A Simple Name of Venue like: <i>Conference Room, Auditorium, etc.</i></small>
+                                </div>                      
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Venue Location -->
+                    <div class="ui-g-12 ui-md-3">
+                        <div class="tab1-card">
+                            <span class="md-inputfield">
+                                <input type="text"
+                                    [ngClass]="{'ng-dirty ng-invalid': (editVenueForm.get('tab1Group.location').touched || editVenueForm.get('tab1Group.location').dirty) && editVenueForm.get('tab1Group.location').errors }"
+                                    formControlName="location" pInputText />
+                                <label>Venue Location:</label>
+                                <div *ngIf="(editVenueForm.get('tab1Group.location')?.touched || editVenueForm.get('tab1Group.location')?.dirty) && editVenueForm.get('tab1Group.location')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                    Venue Location is required
+                                </div> 
+                                <div class="vn-ui-message">
+                                    <i class="material-icons">info</i><small> Where specifically in your place is this venue located? <i>e.g 3rd Floor, Basement, etc.</i></small>
+                                </div>                    
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Minimum Capacity -->
+                    <div class="ui-g-12 ui-md-3">
+                        <div class="tab1-card">
+                            <span class="md-inputfield">
+                                <input type="number"
+                                    [ngClass]="{'ng-dirty ng-invalid': (editVenueForm.get('tab1Group.capMin').touched || editVenueForm.get('tab1Group.capMin').dirty) && editVenueForm.get('tab1Group.capMin').errors }"
+                                    formControlName="capMin" pInputText />
+                                <label>Minimum Capacity:</label>
+                                <div *ngIf="(editVenueForm.get('tab1Group.capMin')?.touched || editVenueForm.get('tab1Group.capMin')?.dirty) && editVenueForm.get('tab1Group.capMin')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                    Minimum Capacity is required
+                                </div>
+                                <div class="vn-ui-message">
+                                    <i class="material-icons">info</i><small> The minimum capacity that your venue requires (atleast 2)</small>
+                                </div>                  
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Maximum Capacity -->
+                    <div class="ui-g-12 ui-md-3">
+                        <div class="tab1-card">
+                            <span class="md-inputfield">
+                                <input type="number"
+                                    [ngClass]="{'ng-dirty ng-invalid': (editVenueForm.get('tab1Group.capMax').touched || editVenueForm.get('tab1Group.capMax').dirty) && editVenueForm.get('tab1Group.capMax').errors }"
+                                    formControlName="capMax" pInputText />
+                                <label>Maximum Capacity:</label>
+                                <div *ngIf="(editVenueForm.get('tab1Group.capMax')?.touched || editVenueForm.get('tab1Group.capMax')?.dirty) && editVenueForm.get('tab1Group.capMax')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                    Maximum Capacity is required
+                                </div>     
+                                <div class="vn-ui-message">
+                                    <i class="material-icons">info</i><small> The maximum capacity that your venue can handle</small>
+                                </div>                 
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </p-tabPanel>
+
+            <!-- Overview, Reservation Policy/Rules -->
+            <p-tabPanel header="Overview &amp; Reservation Policy/Rules">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-6">
+                        <div class="ui-fluid">
+                            <h3>Overview</h3>
+                            <span class="md-inputfield">
+                                <textarea
+                                [ngClass]="{'ng-dirty ng-invalid': (editVenueForm.get('overview').touched || editVenueForm.get('overview').dirty) && editVenueForm.get('overview').errors }"
+                                formControlName="overview"
+                                [rows]="6" [cols]="0" pInputTextarea placeholder="Write an overview for this venue" autoResize="true"></textarea>
+                                <div *ngIf="(editVenueForm.get('overview')?.touched || editVenueForm.get('overview')?.dirty) && editVenueForm.get('overview')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                    Please write an overview about this venue.
+                                </div>
+                                <div class="vn-ui-message">
+                                    <i class="material-icons">info</i><small> A Short introduction on what they should expect on using your venue.</small>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <div class="ui-fluid">
+                            <h3>Reservation Policy/Rules</h3>
+                            <span class="md-inputfield">
+                                <textarea
+                                [ngClass]="{'ng-dirty ng-invalid': (editVenueForm.get('resPolicy').touched || editVenueForm.get('resPolicy').dirty) && editVenueForm.get('resPolicy').errors }"
+                                formControlName="resPolicy"
+                                [rows]="6" [cols]="0" pInputTextarea placeholder="Write the reservation policy for this venue" autoResize="true"></textarea>
+                                <div *ngIf="(editVenueForm.get('resPolicy')?.touched || editVenueForm.get('resPolicy')?.dirty) && editVenueForm.get('resPolicy')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                    Please write a reservation policy for this venue.
+                                </div> 
+                                <div *ngIf="(editVenueForm.get('resPolicy')?.touched || editVenueForm.get('resPolicy')?.dirty) && editVenueForm.get('resPolicy')?.errors?.maxlength" class="ui-message ui-messages-error ui-corner-all">
+                                    Reservation Policy must be 200 characters or less.
+                                </div>
+                                <div class="vn-ui-message">
+                                    <i class="material-icons">info</i><small> Set some rules/policy about the reservation on your venue. <i>e.g "This venue requires 50% downpayment, etc."</i></small>
+                                </div>                  
+                            </span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </p-tabPanel>
+
+            <!-- Categories and Features -->
+            <p-tabPanel formGroupName="tab2Group" header="Venue Categories &amp; Features">
+                <div class="ui-g">
+
+                    <div class="ui-g-12 ui-md-6 ui-fluid">
+                        <div class="ui-g-6">
+                            <h3>Venue Categories</h3>
+                            <p-multiSelect [options]="categoriesOpts" formControlName="categories"></p-multiSelect>
+                        </div>
+                        <div class="ui-g-6">
+                            Selected Categories: <br>
+                            <span *ngIf="editVenueForm.value.tab2Group.categories?.length > 0">
+                                {{editVenueForm.value.tab2Group.categories | json}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-fluid">
+                        <div class="ui-g-6">
+                        <h3>Venue Features</h3>
+                            <p-multiSelect [options]="featuresOpts" formControlName="features"></p-multiSelect>
+                        </div>
+                        <div class="ui-g-6">
+                            Selected Features: <br>
+                            <span *ngIf="editVenueForm.value.tab2Group.features?.length > 0">
+                                {{editVenueForm.value.tab2Group.features | json}}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                
+            </p-tabPanel>
+
+            <!-- Venue Costs and Availability -->
+            <p-tabPanel header="Set the Venue Costs and Availability">
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-md-6">
+                        <div class="ui-g-12 card">
+                            <div class="ui-g-6"><h4 class="vn-set-cost-head">Set Venue Costs</h4></div>
+                            <div class="ui-g-6">
+                                <button (click)="addCost()" pButton type="button" label="Add Cost" icon="ui-icon-plus" class="green-btn"></button>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-12 card">
+
+                            <!-- Costs -->
+                            <div formArrayName="costs" *ngFor="let cost of costs.controls; let i=index" class="ui-g-12 ui-md-12 ui-fluid">
+                                <div [formGroupName]="i">
+
+                                    <div class="ui-g-12 card">
+                                        <div class="ui-g-12 ui-md-2">
+                                            Cur.: <br>
+                                            <p-dropdown [options]="currencyOpts" formControlName="cur" [autoWidth]="false"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-5">
+                                            Value: <br>
+                                            <p-dropdown [options]="valueOpts" formControlName="value" [autoWidth]="false"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            Unit: <br>
+                                            <p-dropdown [options]="unitOpts" formControlName="unit" [autoWidth]="false"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-2">
+                                            <button *ngIf="costs.controls.length > 1" pButton (click)="removeCost(i)" type="button" icon="ui-icon-delete" class="vn-btn orange-btn"></button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6">
+                        <div class="ui-g-12 card">
+                            <div class="ui-g-6"><h4 class="vn-set-av-head">Set Venue Availability</h4></div>
+                            <div class="ui-g-6">
+                                <button (click)="addAvailability()" pButton type="button" label="Add Availability" icon="ui-icon-plus" class="green-btn"></button>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-12 card">
+                            <!-- Availability -->
+                            <div formArrayName="availabilities" *ngFor="let availability of availabilities.controls; let i=index" class="ui-g-12 ui-md-12 ui-fluid">
+                                <div [formGroupName]="i">
+
+                                    <div class="ui-g-12 card">
+                                        <div class="ui-g-12 ui-md-4">
+                                            Open Days: <br>
+                                            <p-dropdown [options]="dayRangeOpts" formControlName="dayRange" [autoWidth]="false"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            From: <br>
+                                            <p-dropdown [options]="timeRangeFromOpts" formControlName="timeRangeFrom" [autoWidth]="false"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            To: <br>
+                                            <p-dropdown [options]="timeRangeToOpts" formControlName="timeRangeTo" [autoWidth]="false"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-2">
+                                            <button *ngIf="availabilities.controls.length > 1" pButton (click)="removeAvailability(i)" type="button" icon="ui-icon-delete" class="orange-btn"></button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                
+            </p-tabPanel>
+
+        </p-tabView>
+        <p-toolbar>
+            <div class="ui-toolbar-group-right">
+                <button pButton type="submit" [disabled]="!editVenueForm.valid" label="Save" icon="ui-icon-check" class="green-btn"></button>
+                <button [disabled]="editVenueForm.pristine" (click)="displayDiscard=true" pButton type="button" label="Reset" icon="ui-icon-update" class="btn"></button>
+                <a [routerLink]="['../../', 'do', 'list']"><button pButton type="button" label="Back to Lists" icon="ui-icon-format-list-bulleted" class="yellow-btn"></button></a>
+            </div>
+        </p-toolbar>
+    </form>
+</div>
+
+<p-dialog appendTo="body" header="Discard Changes?" [(visible)]="displayDiscard" modal="modal" showEffect="fade" width="400">
+    <p>You are about to Discard changes made from this form, are you sure?</p>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa-close" (click)="displayDiscard=false" label="No"></button>
+            <button type="button" pButton icon="fa-check" (click)="venueEditInit()" label="Yes"></button>
+        </div>
+    </p-footer>
+</p-dialog>

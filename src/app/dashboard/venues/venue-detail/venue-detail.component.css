@@ -1,0 +1,119 @@
+.vn-card {
+    padding-bottom: 5px !important;
+}
+
+.vn-show-img {
+    border: 2px solid #F7F7F7;
+    border-radius: 3%;
+}
+
+.vn-vdc-name {
+    color: #4CAF50 !important;
+    font-size: 2em !important;
+}
+
+.vn-vdc-loc {
+    color: #828282 !important;
+    font-size: 1.5em !important;
+}
+
+.vn-vdc-overview {
+    color: #828282 !important;
+    font-size: 1.1em !important;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.vn-vdc-more {
+    color: #828282 !important;
+    font-size: 1.5em !important;
+}
+
+.no-costs {
+    padding: 10px;
+    color: #F44336;
+}
+
+.no-availability {
+    padding: 10px;
+    color: #F44336;
+}
+
+.vn-card-in {
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.vn-vdc-en {
+    color: #828282 !important;
+    font-size: 1.3em !important;
+    margin-top: 0px !important;
+}
+
+.vn-vdn-en-sw {
+    margin-top: -20px !important
+}
+
+.vn-vdc-texts {
+    padding-bottom: 0px !important;
+}
+
+.vn-vdc-ov {
+    margin-top: 0px !important;
+}
+
+hr {
+    border-color: #BCBCBC !important;
+    margin-top: 0px !important;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+.image {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: 180px !important;
+  object-fit: cover;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+
+.image-gallery {
+    width: 100%;
+    height: 180px !important;
+    object-fit: cover;
+  }
+
+.middle {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%)
+}
+
+.container:hover .image {
+  opacity: 0.3;
+}
+
+.container:hover .middle {
+  opacity: 1;
+}
+
+.text {
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  padding: 16px 32px;
+  cursor: pointer;
+}

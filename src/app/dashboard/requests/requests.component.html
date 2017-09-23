@@ -1,0 +1,260 @@
+<p-growl [value]="msgs"></p-growl>
+<p-confirmDialog></p-confirmDialog>
+<div class="ui-g">
+    <div class="card ui-g-12">
+        <div class="ui-g-12">
+            <div class="ui-g-12 ui-md-6 ui-fluid">
+                <p style="color: #4CAF50;">Choose Reservation Request </p>
+                <p-dropdown (onChange)="onReservationSelectChange($event)" [options]="reserveOpts" [autoWidth]="false"></p-dropdown>
+            </div>
+        </div>
+        <div *ngIf="selectedReservationReq?._id" class="ui-g-12">
+            <p-toolbar>
+                <div class="ui-toolbar-group-left">
+                    <button pButton type="button" label="Approve Reservation Request" icon="ui-icon-check" class="green-btn" (click)="displayConfirmApprove=true" ></button>
+                    <button *ngIf="selectedReservationReq?.payment_req_ids?.length < 1" (click)="showPRDialog()" pButton type="button" label="Send Payment Request" icon="ui-icon-payment" class="yellow-btn"></button>
+                    <button *ngIf="selectedReservationReq?.payment_req_ids?.length > 0" (click)="showPRDialog()" pButton type="button" label="Send Another Payment Request" icon="ui-icon-payment" class="yellow-btn"></button>
+                    <button pButton type="button" (click)="displayRejectDialog=true" label="Reject Reservation Request" icon="ui-icon-delete" class="red-btn"></button>
+                </div>
+            </p-toolbar>    
+        </div>
+        <div *ngIf="selectedReservationReqPRs?.count > 0" class="ui-g-12">
+            <p-panel header="Sent Payment Request(s)" [toggleable]="true" [collapsed]="true">
+                <div class="ui-g">
+                    <div *ngFor="let prs of selectedReservationReqPRs.payment_reqs" class="ui-g-6">
+                        <p-panel>
+                            <p-header>
+                                <div class="ui-helper-clearfix">
+                                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{prs.createdAt | date: 'medium'}}</span>
+                                    <p-splitButton [style]="{'float':'right'}" label="Delete" icon="ui-icon-delete" (onClick)="confirmPmtRequestDeletion(prs._id)" [model]="items"></p-splitButton>
+                                </div>
+                            </p-header>
+                            
+                            <strong>Amount: </strong><span>Php {{prs.amount}}</span> <br>
+                            <strong>Inclusions: </strong><span>{{prs.inclusions}}</span> <br>
+                            <strong>Payment Options: </strong><span>{{prs.payment_opts}}</span> <br>
+                            <strong>Status: </strong><span *ngIf="prs.payment_req_stat === 'pending'; else hasPmt">Waiting for the payment</span> <ng-template #hasPmt> {{prs.payment_req_stat}} <br> <button pButton type="button" (click)="getPaymentInfo(prs.payment_info_id)" label="View Payment Info" icon="ui-icon-remove-red-eye" class="yellow-btn"></button> </ng-template>  <br>
+                        </p-panel>
+                    </div>
+                </div>
+                
+            </p-panel>
+        </div>
+        <div *ngIf="selectedReservationReq?._id; else notSelectedReq" class="ui-g-12">
+            <div class="ui-g-7">
+                <p-panel >
+                    <p-header>
+                        {{selectedReservationReq.event_title}}
+                    </p-header>
+                        <p><strong>Event INFO: </strong></p><hr>
+                        <p>
+                            <strong>Event Date(s): </strong>({{selectedReservationReq.event_date_type}})<span *ngFor="let edate of selectedReservationReq.event_date_time">
+                                {{edate.event_date | date: 'fullDate'}} <br>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Event Description: </strong>{{selectedReservationReq.event_desc}}
+                        </p>
+                        <p>
+                            <strong>Event Type: </strong>{{selectedReservationReq.event_type}}
+                        </p>
+                        <p>
+                            <strong>No. of Expected Attendees: </strong>{{selectedReservationReq.no_expected_attnd}}
+                        </p>
+                        <p>
+                            <strong>Type of Expected Guests: </strong>{{selectedReservationReq.guests_types}}
+                        </p>
+                        <p-panel *ngIf="selectedReservationReq.note">
+                            <p-header>
+                                Note from the requester
+                            </p-header>
+                            <p>
+                                {{selectedReservationReq.note}}
+                            </p>
+                        </p-panel>
+                        <br>
+                        <p-panel>
+                            <p-header>
+                                Reservation Request Information
+                            </p-header>
+                            <p>
+                                Reservation Request ID: {{selectedReservationReq._id}} <br>
+                                Date Created: {{selectedReservationReq.createdAt | date:'medium'}} <br>
+                                Date Updated: {{selectedReservationReq.updatedAt | date:'medium'}} <br>
+                            </p>
+                        </p-panel>
+                </p-panel>
+            </div>
+            <div *ngIf="selectedVenue?._id && selectedLooker?._id" class="ui-g-5">
+                <div class="card shadow ui-shadow-2">
+                    <div class="ui-g">
+                        <h4>Requested By:</h4>
+                        <div class="ui-g-12">
+                            <div class="ui-g-4">
+                                <img src="{{lookerImgHost}}{{selectedLooker.img_url}}" width="100%" style="border-radius: 50%; height: 100px !important; object-fit: cover;" alt="">
+                            </div>
+                            <div class="ui-g-8">
+                                <p>{{selectedLooker.fullname}} <br>
+                                {{selectedLooker.email}} <br>
+                                {{selectedLooker.number}} <br>
+                                Member Since: {{selectedLooker.createdAt | date}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-w-title shadow ui-shadow-2">
+                    <div class="ui-g">
+                        <h4>Requested Venue</h4>
+                        <div class="ui-g-12">
+                            <div class="ui-g-5">
+                                <img *ngIf="selectedVenue.img_url === 'default'" src="assets/layout/images/dark-user-bg.png" width="100%" alt="">
+                                <img *ngIf="!(selectedVenue.img_url === 'default')" src="{{venueImgHost}}{{selectedVenue?.img_url}}" width="100%" alt="">
+                            </div>
+                            <div class="ui-g-7">
+                                <h4 style="color: #4CAF50 !important; margin-top: 10px !important; margin-bottom: 5px !important;">{{selectedVenue.name}}</h4>
+                                <p>{{selectedVenue.location}}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="ui-g-12">
+                            <p><strong>Availability: </strong></p>
+                            <div *ngFor="let av of selectedVenue.availability" class="card ui-g-12 shadow-box ui-shadow-2">
+                                {{av.dayRange}}: From: {{av.timeRangeFrom}} To: {{av.timeRangeTo}}
+                            </div>
+                            <p><strong>Cost(s): </strong></p>
+                            <div *ngFor="let cost of selectedVenue.costs" class="card ui-g-12 shadow-box ui-shadow-2">
+                                {{cost.cur}} {{cost.value}} per {{cost.unit}}
+                            </div>
+                            <hr>
+                            <p-accordion>
+                                <p-accordionTab header="Reservation Policy">
+                                    <p>{{selectedVenue.reservation_policy}}</p>
+                                </p-accordionTab>
+                                <p-accordionTab header="Features">
+                                    <div class="ui-g">
+                                        <div *ngFor="let feat of selectedVenue.features" class="card shadow ui-shadow-2 ui-g-12 ui-md-6 ui-lg-6">
+                                            {{feat}}
+                                        </div> 
+                                    </div>
+                                </p-accordionTab>
+                                <p-accordionTab header="Venue Type(s)">
+                                    <div class="ui-g">
+                                        <div *ngFor="let vtype of selectedVenue.venue_type" class="card shadow ui-shadow-2 ui-g-12 ui-md-6 ui-lg-6">
+                                            {{vtype}}
+                                        </div>  
+                                    </div>
+                                </p-accordionTab>
+                            </p-accordion>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <ng-template #notSelectedReq>
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <div class="vn-not-selected-yet">
+                        <h1>Reservation Request Details will appear here</h1>
+                        <h3>Choose Reservation Request</h3>
+                    </div>
+                </div>
+                <div class="ui-g-6">
+                    <div class="ui-g-12">
+                        <div class="vn-not-selected-yet-sides-look">
+                            <h4>LOOKER Details will appear here</h4>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="vn-not-selected-yet-sides">
+                            <h4>VENUE Details will appear here</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<p-dialog header="Send Payment Request" [(visible)]="displayPR" modal="modal" width="700" [responsive]="true">
+    <div class="ui-fluid">
+        <div class="ui-g">
+            <div class="ui-g-6">
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon">Amount</span>   
+                    <input type="number" [(ngModel)]="prInfo.amount" pInputText placeholder="Amount">    
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon">Inclusions</span>   
+                    <textarea [(ngModel)]="prInfo.inclusions"
+                    [rows]="3" [cols]="0" pInputTextarea placeholder="Write down the inclusions / scope of the requested Amount" autoResize="true"></textarea>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon">Payment Options</span>   
+                    <textarea [(ngModel)]="prInfo.payment_opts"
+                    [rows]="3" [cols]="0" pInputTextarea placeholder="Write down the payment options for the requested Amount" autoResize="true"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <p-footer>
+        <button type="button" pButton icon="fa-check" (click)="submitPr()" label="Submit"></button>
+        <button type="button" pButton icon="fa-close" (click)="displayPR=false" label="Cancel"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Payment Info details" [(visible)]="displayPaymentInfo" modal="modal" width="900" [responsive]="true">
+    <div class="ui-fluid">
+        <div class="ui-g">  
+            <div class="ui-g-12" *ngIf="!(paymentInfo === null)" style="overflow-y: scroll; height:400px;">
+                <p>
+                    <strong>Date Submitted: </strong>{{paymentInfo.createdAt | date: 'medium'}} <br>
+                    <strong>Amount paid: </strong>{{paymentInfo.amount | currency: 'PHP'}} <br>
+                    <strong>Reference Details: </strong>{{paymentInfo.reference}} <br>
+                    <strong>Image Reference(s): </strong>
+                </p>
+                <div class="ui-g-4" *ngFor="let img of paymentInfo.img_reference" >
+                    <img src="{{assemBleImg(img)}}" alt="" width="100%">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <p-footer>
+        <button type="button" pButton icon="fa-close" (click)="displayPaymentInfo=false" label="Close"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Approve Reservation Request" [(visible)]="displayConfirmApprove" modal="modal" width="400" [responsive]="true">
+    <div class="ui-fluid">
+        <div class="ui-g">  
+            <p style="text-align: center; font-size: 1.4em">Are you sure you want to approve this Reservation Request? <br> <small>Take your time to consider its Payment Infos, Date, etc.</small></p>
+        </div>
+    </div>
+    
+    <p-footer>
+        <button type="button" pButton icon="fa-check" (click)="approveReservatioRequest(selectedReservationReq._id)" label="Approve"></button>
+        <button type="button" pButton icon="fa-close" (click)="displayConfirmApprove=false" label="Close"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Approve Reservation Request" [(visible)]="displayRejectDialog" modal="modal" width="700" [responsive]="true">
+    <div class="ui-fluid">
+        <div class="ui-g">  
+            <div class="ui-g-12">
+                <p style="text-align: center; font-size: 1.4em">Are you sure you want to REJECT this Reservation Request? <br> <small>Take your time to consider its Payment Infos, Date, etc.</small></p>
+                <textarea [(ngModel)]="rejectionMessage" [rows]="6" [cols]="0" pInputTextarea placeholder="Please write the reason why you reject this reservation" autoResize="true"></textarea>
+            </div>
+        </div>
+    </div>
+    
+    <p-footer>
+        <button type="button" pButton icon="fa-check" (click)="rejectReservationRequest(selectedReservationReq._id)" label="Reject"></button>
+        <button type="button" pButton icon="fa-close" (click)="displayRejectDialog=false" label="Close"></button>
+    </p-footer>
+</p-dialog>

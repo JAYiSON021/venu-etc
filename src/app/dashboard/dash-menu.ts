@@ -1,0 +1,182 @@
+import { Component, Input, OnInit, EventEmitter, ViewChild, Inject, forwardRef } from '@angular/core';
+import { trigger, state, style, transition, animate} from '@angular/animations';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+import { MenuItem } from 'primeng/primeng';
+import { DashboardComponent } from './dashboard.component';
+
+@Component({
+    selector: 'vn-menu',
+    template: `
+        <ul app-submenu [item]="model" root="true" class="ultima-menu ultima-main-menu clearfix" [reset]="reset" visible="true"></ul>
+    `
+})
+
+export class DashMenuComponent implements OnInit {
+    @Input() reset: boolean;
+
+    model: any[];
+
+    constructor(@Inject(forwardRef(() => DashboardComponent)) public app: DashboardComponent) {}
+
+    ngOnInit() {
+        this.model = [
+            {label: 'Dashboard', icon: 'dashboard', routerLink: ['/']},
+            {label: 'Venues', icon: 'place', routerLink: ['venues']},
+            {label: 'Schedules', icon: 'event', routerLink: ['sched']},
+            {label: 'Tasks', icon: 'done', routerLink: ['tasks']},
+            {label: 'Place Details', icon: 'web', routerLink: ['org']},
+            {
+                label: 'Settings', icon: 'settings_application',
+                items: [
+                    {
+                        label: 'Change Theme', icon: 'palette',
+                        items: [
+                            {label: 'Indigo - Pink', icon: 'brush', command: (event) => {this.changeTheme('indigo')}},
+                            {label: 'Brown - Green', icon: 'brush', command: (event) => {this.changeTheme('brown')}},
+                            {label: 'Blue - Amber', icon: 'brush', command: (event) => {this.changeTheme('blue')}},
+                            {label: 'Blue Grey - Green', icon: 'brush', command: (event) => {this.changeTheme('blue-grey')}},
+                            {label: 'Dark - Blue', icon: 'brush', command: (event) => {this.changeTheme('dark-blue')}},
+                            {label: 'Dark - Green', icon: 'brush', command: (event) => {this.changeTheme('dark-green')}},
+                            {label: 'Green - Yellow', icon: 'brush', command: (event) => {this.changeTheme('green')}},
+                            {label: 'Purple - Cyan', icon: 'brush', command: (event) => {this.changeTheme('purple-cyan')}},
+                            {label: 'Purple - Amber', icon: 'brush', command: (event) => {this.changeTheme('purple-amber')}},
+                            {label: 'Teal - Lime', icon: 'brush', command: (event) => {this.changeTheme('teal')}},
+                            {label: 'Cyan - Amber', icon: 'brush', command: (event) => {this.changeTheme('cyan')}},
+                            {label: 'Grey - Deep Orange', icon: 'brush', command: (event) => {this.changeTheme('grey')}}
+                        ]
+                    },
+                    {
+                        label: 'Change Layout', icon: 'settings_application',
+                        items: [
+                            {label: 'Compact Size', icon: 'fiber_manual_record', command: () => this.app.layoutCompact = true},
+                            {label: 'Material Size', icon: 'fiber_smart_record',  command: () => this.app.layoutCompact = false},
+                            {label: 'Static Menu', icon: 'menu',  command: () => this.app.changeToStaticMenu()},
+                            {label: 'Overlay Menu', icon: 'exit_to_app',  command: () => this.app.changeToOverlayMenu()},
+                            {label: 'Horizontal Menu', icon: 'border_horizontal',  command: () => this.app.changeToHorizontalMenu()},
+                            {label: 'Light Menu', icon: 'label_outline',  command: () => this.app.darkMenu = false},
+                            {label: 'Dark Menu', icon: 'label',  command: () => this.app.darkMenu = true},
+                            {label: 'Inline Profile', icon: 'contacts',  command: () => this.app.profileMode = 'inline'},
+                            {label: 'Top Profile', icon: 'person_pin',  command: () => this.app.profileMode = 'top'},
+                        ]
+                    },
+                ]
+            }
+        ];
+    }
+
+    changeTheme(theme) {
+        let themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
+        let layoutLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('layout-css');
+
+        themeLink.href = 'assets/theme/theme-' + theme +'.css';
+        layoutLink.href = 'assets/layout/css/layout-' + theme +'.css';
+    }
+}
+
+@Component({
+    selector: '[app-submenu]',
+    template: `
+        <ng-template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
+            <li [ngClass]="{'active-menuitem': isActive(i)}" *ngIf="child.visible === false ? false : true">
+                <a [href]="child.url||'#'" (click)="itemClick($event,child,i)" class="ripplelink" *ngIf="!child.routerLink" [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target">
+                    <i class="material-icons">{{child.icon}}</i>
+                    <span>{{child.label}}</span>
+                    <i class="material-icons" *ngIf="child.items">keyboard_arrow_down</i>
+                </a>
+
+                <a (click)="itemClick($event,child,i)" class="ripplelink" *ngIf="child.routerLink"
+                    [routerLink]="child.routerLink" routerLinkActive="active-menuitem-routerlink" [routerLinkActiveOptions]="{exact: true}" [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target">
+                    <i class="material-icons">{{child.icon}}</i>
+                    <span>{{child.label}}</span>
+                    <i class="material-icons" *ngIf="child.items">keyboard_arrow_down</i>
+                </a>
+                <ul app-submenu [item]="child" *ngIf="child.items" [@children]="isActive(i) ? 'visible' : 'hidden'" [visible]="isActive(i)" [reset]="reset"></ul>
+            </li>
+        </ng-template>
+    `,
+    animations: [
+        trigger('children', [
+            state('hidden', style({
+                height: '0px'
+            })),
+            state('visible', style({
+                height: '*'
+            })),
+            transition('visible => hidden', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')),
+            transition('hidden => visible', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)'))
+        ])
+    ]
+})
+export class SubMenuComponent {
+
+    @Input() item: MenuItem;
+
+    @Input() root: boolean;
+
+    @Input() visible: boolean;
+
+    _reset: boolean;
+    
+    activeIndex: number;
+
+    constructor(@Inject(forwardRef(() => DashboardComponent)) public app:DashboardComponent, public router: Router, public location: Location) {}
+
+    itemClick(event: Event, item: MenuItem, index: number) {
+        // avoid processing disabled items
+        if(item.disabled) {
+            event.preventDefault();
+            return true;
+        }
+
+        // activate current item and deactivate active sibling if any
+        this.activeIndex = (this.activeIndex === index) ? null : index;
+
+        // execute command
+        if(item.command) {
+            if(!item.eventEmitter) {
+                item.eventEmitter = new EventEmitter();
+                item.eventEmitter.subscribe(item.command);
+            }
+
+            item.eventEmitter.emit({
+                originalEvent: event,
+                item: item
+            });
+        }
+
+        // prevent hash change
+        if(item.items || (!item.url && !item.routerLink)) {
+            event.preventDefault();
+        }
+
+        // hide menu
+        if(!item.items) {
+            if(this.app.isHorizontal())
+                this.app.resetMenu = true;
+            else
+                this.app.resetMenu = false;
+
+            this.app.overlayMenuActive = false;
+            this.app.staticMenuMobileActive = false;
+        }
+    }
+
+    isActive(index: number): boolean {
+        return this.activeIndex === index;
+    }
+
+    @Input() get reset(): boolean {
+        return this._reset;
+    }
+
+    set reset(val:boolean) {
+        this._reset = val;
+
+        if (this._reset && this.app.isHorizontal()) {
+            this.activeIndex = null;
+        }
+    }
+}
+
+

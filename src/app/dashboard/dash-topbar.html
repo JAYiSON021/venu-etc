@@ -1,0 +1,207 @@
+<p-growl [value]="msgs"></p-growl>
+<div class="topbar clearfix">
+    <div class="topbar-left">            
+        <div class="logo"></div>
+    </div>
+
+    <div class="topbar-right">
+        <a id="menu-button" href="#" (click)="app.onMenuButtonClick($event)">
+            <i></i>
+        </a>
+        
+        <a id="topbar-menu-button" href="#" (click)="app.onTopbarMenuButtonClick($event)">
+            <i class="material-icons">menu</i>
+        </a>
+        <ul class="topbar-items animated fadeInDown" [ngClass]="{'topbar-items-visible': app.topbarMenuActive}">
+            <li #profile class="profile-item" *ngIf="app.profileMode==='top'||app.isHorizontal()"
+                [ngClass]="{'active-top-menu':app.activeTopbarItem === profile}">
+
+                <a href="#" (click)="app.onTopbarItemClick($event,profile)">                            
+                    <div *ngIf="vadminData.img_url=='default'; hasImg" class="profile-image">
+                        <img src="assets/layout/images/default.png" width="36px" height="36px" style="border-radius: 50%;">
+                    </div>
+                    <ng-template #hasImg>
+                        <img src="{{buildVadminImg(vadminData.img_url)}}" width="36px" height="36px" style="border-radius: 50%;">
+                    </ng-template>
+                    <span class="topbar-item-name">{{vadminData?.firstname}}</span>
+                </a>
+                
+                <ul class="ultima-menu animated fadeInDown">
+                    <li role="menuitem">
+                        <a [routerLink]="['vadmin']" style="cursor: pointer;">
+                            <i class="material-icons">person</i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a (click)="display=true" style="cursor: pointer;">
+                            <i class="material-icons">power_settings_new</i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li #settings [ngClass]="{'active-top-menu':app.activeTopbarItem === settings}">
+                <a href="#" (click)="app.onTopbarItemClick($event,settings)"> 
+                    <i class="topbar-icon material-icons">settings</i>
+                    <span class="topbar-item-name">Settings</span>
+                </a>
+                <ul class="ultima-menu animated fadeInDown">
+                    <li role="menuitem">
+                        <a [routerLink]="['org']" style="cursor: pointer;">
+                            <i class="material-icons">web</i>
+                            <span>Company/Org. Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- <li #messages [ngClass]="{'active-top-menu':app.activeTopbarItem === messages}">
+                <a href="#" (click)="app.onTopbarItemClick($event,messages)"> 
+                    <i class="topbar-icon material-icons animated swing">message</i>
+                    <span class="topbar-badge animated rubberBand">5</span>
+                    <span class="topbar-item-name">Messages</span>
+                </a>
+                <ul class="ultima-menu animated fadeInDown">
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <img src="assets/layout/images/avatar1.png" width="35"/>
+                            <span>Give me a call</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <img src="assets/layout/images/avatar2.png" width="35"/>
+                            <span>Sales reports attached</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <img src="assets/layout/images/avatar3.png" width="35"/>
+                            <span>About your invoice</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <img src="assets/layout/images/avatar2.png" width="35"/>
+                            <span>Meeting today at 10pm</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <img src="assets/layout/images/avatar4.png" width="35"/>
+                            <span>Out of office</span>
+                        </a>
+                    </li>
+                </ul>
+            </li> -->
+
+            <li #notifse [ngClass]="{'active-top-menu':app.activeTopbarItem === notifse}">
+                <a href="#" (click)="app.onTopbarItemClick($event,notifse)"> 
+                    <i class="topbar-icon material-icons">notifications</i>
+                    <span *ngIf="n_count > 0" class="topbar-badge animated rubberBand">{{n_count}}</span>
+                    <span class="topbar-item-name">Notifications</span>
+                </a>
+                <ul class="ultima-menu animated fadeInDown">
+                    <li *ngFor="let noteef of notifs.somenotif" role="menuitem" [ngStyle]="{'background-color' : el_color(noteef.is_seen), 'font-color' : font_color(noteef.is_seen)}" style="border-bottom: 1px solid #E4E4E4;">
+                        <a (click)="assignNotifBody(noteef.notif_type, noteef)" style="cursor: pointer;">
+                            <i *ngIf="noteef.notif_type == 'cancelled_reservation'" class="material-icons">cancel</i>
+                            <i *ngIf="noteef.notif_type == 'new_payment_info'" class="material-icons">payment</i>
+                            <span *ngIf="noteef.notif_type == 'cancelled_reservation'">Cancelled Reservation</span>
+                            <span *ngIf="noteef.notif_type == 'new_payment_info'">View Payment info</span>
+                        </a>
+                    </li>
+
+                    <li *ngIf="notifs.count < 1" role="menuitem">
+                        <a style="cursor: pointer;">
+                            <span>No Notifications to show</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li #notifications [ngClass]="{'active-top-menu':app.activeTopbarItem === notifications}">
+                <a href="#" (click)="app.onTopbarItemClick($event,notifications)"> 
+                    <i class="topbar-icon material-icons">event</i>
+                    <span *ngIf="reservationReq.count > 0" class="topbar-badge animated rubberBand">{{reservationReq.count}}</span>
+                    <span class="topbar-item-name">Reservation Requests</span>
+                </a>
+                <ul class="ultima-menu animated fadeInDown">
+                    <li *ngIf="reservationReq.count > 0" role="menuitem">
+                        <a [routerLink]="['req']" style="cursor: pointer;">
+                            <i class="material-icons">event</i>
+                            <span>{{reservationReq.count}} Reservation Request(s)</span>
+                        </a>
+                    </li>
+                    <li *ngIf="reservationReq.count < 1" role="menuitem">
+                        <a style="cursor: pointer;">
+                            <span>No Reservation Requests to show</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- <li #search class="search-item" [ngClass]="{'active-top-menu':app.activeTopbarItem === search}"
+                (click)="app.onTopbarItemClick($event,search)">
+                <span class="md-inputfield">
+                    <input type="text" pInputText>
+                    <label>Search</label>
+                    <i class="topbar-icon material-icons">search</i>
+                </span>
+            </li> -->
+        </ul>
+    </div>
+</div>
+
+<p-dialog appendTo="body" header="Logout" [(visible)]="display" modal="modal" showEffect="fade" width="400">
+    <p>You are about to sign out on your portal, are you sure?</p>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa-close" (click)="display=false" label="No"></button>
+            <button type="button" pButton icon="fa-check" (click)="logout()" label="Yes"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Details" [(visible)]="displayNotifBody_cancelled" modal="modal" width="400" [responsive]="true">
+    <div class="ui-fluid">
+        <div class="ui-g">  
+            <div class="ui-g-12">
+                <p-panel header="{{notifBody?.createdAt | date: 'fullDate'}}">
+                    <p style="font-size: 1.2em;">{{notifBody?.notif_body?.message}}</p>
+                    <hr>
+                    <button type="button" pButton icon="fa-check" (click)="deleteNotifById(notifBody._id)" label="Delete"></button>
+                </p-panel>
+            </div>
+        </div>
+    </div>
+    
+    <p-footer>
+        <button type="button" pButton icon="fa-check" (click)="seenNotifById(notifBody._id)" label="Ok"></button>
+        <button type="button" pButton icon="fa-close" (click)="displayNotifBody_cancelled=false" label="Close"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Details" [(visible)]="displayNotifBody_viewpay" modal="modal" width="400" [responsive]="true">
+    
+    <div class="ui-g">  
+        <div class="ui-g-12">
+            <p-panel header="{{notifBody?.createdAt | date: 'fullDate'}}">
+                <p style="font-size: 1.2em;">{{notifBody?.notif_body?.message}}</p>
+                <hr>
+                <p *ngIf="payment_info_loaded" style="font-size: 1em;">
+                    <strong>Date Created:</strong> {{payment_info.createdAt | date: 'fullDate'}} <br>
+                    <strong>Reference:</strong> {{payment_info.reference}} <br>
+                    <strong>Amount:</strong> {{payment_info.amount | currency: 'PHP'}} <br>
+                </p>
+                <button type="button" pButton icon="fa-check" (click)="onNavigateToResReq()" label="View More"></button>
+                <button type="button" pButton icon="fa-check" (click)="deleteNotifById(notifBody._id)" label="Delete"></button>
+            </p-panel>
+        </div>
+    </div>
+    
+    <p-footer>
+        <button type="button" pButton icon="fa-check" (click)="seenNotifById(notifBody._id)" label="Ok"></button>
+        <button type="button" pButton icon="fa-close" (click)="displayNotifBody_viewpay=false" label="Close"></button>
+    </p-footer>
+</p-dialog>

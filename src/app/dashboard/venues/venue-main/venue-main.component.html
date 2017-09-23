@@ -1,0 +1,12 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card card-w-title shadow-box ui-shadow-2">
+            <h1>{{orgData?.name}} Venues</h1>
+            <button (click)="viewList()" pButton type="button" label="List" icon="ui-icon-format-list-bulleted" class="yellow-btn"></button>
+            <button (click)="viewAdd()" pButton type="button" label="New" icon="ui-icon-add-location" class="green-btn"></button>
+        </div>
+    </div>
+    <div class="ui-g-12">
+        <router-outlet></router-outlet>
+    </div>
+</div>

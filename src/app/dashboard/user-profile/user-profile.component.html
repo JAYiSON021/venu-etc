@@ -1,0 +1,227 @@
+<p-growl [value]="msgs"></p-growl>
+<div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-lg-12">
+        <form novalidate (ngSubmit)="save()" [formGroup]="userProfileForm">
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <!-- Essential Infos -->
+                    <div class="card card-w-title shadow-box ui-shadow-3">
+                        <h1>Personal Information</h1>
+                        <div class="ui-g form-group">
+                            <div class="ui-g-12 ui-md-4">
+                                Firstname:
+                                <span class="md-inputfield">
+                                    <input type="text"
+                                        [ngClass]="{'ng-dirty ng-invalid': (userProfileForm.get('firstname').touched || userProfileForm.get('firstname').dirty) && userProfileForm.get('firstname').errors }"
+                                        formControlName="firstname" pInputText />
+                                    <div *ngIf="(userProfileForm.get('firstname')?.touched || userProfileForm.get('firstname')?.dirty) && userProfileForm.get('firstname')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                        Firstname is required
+                                    </div>
+                                    <div *ngIf="(userProfileForm.get('firstname')?.touched || userProfileForm.get('firstname')?.dirty) && userProfileForm.get('firstname')?.errors?.minlength" class="ui-message ui-messages-error ui-corner-all">
+                                        Firstname must be 3 characters above
+                                    </div>                     
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                Lastname:
+                                <span class="md-inputfield">
+                                    <input type="text"
+                                        [ngClass]="{'ng-dirty ng-invalid': (userProfileForm.get('lastname').touched || userProfileForm.get('lastname').dirty) && userProfileForm.get('lastname').errors }"
+                                        formControlName="lastname" pInputText />
+                                    <div *ngIf="(userProfileForm.get('lastname')?.touched || userProfileForm.get('lastname')?.dirty) && userProfileForm.get('lastname')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                        Lastname is required
+                                    </div>
+                                    <div *ngIf="(userProfileForm.get('lastname')?.touched || userProfileForm.get('lastname')?.dirty) && userProfileForm.get('lastname')?.errors?.minlength" class="ui-message ui-messages-error ui-corner-all">
+                                        Lastname must be 3 characters above
+                                    </div>                     
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                Email:
+                                <span class="md-inputfield">
+                                    <input type="text" value="{{vadminData?.email}}" pInputText disabled="disabled">
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                Number: 
+                                <span class="md-inputfield">
+                                    <input type="text" 
+                                    [ngClass]="{'ng-dirty ng-invalid': (userProfileForm.get('number').touched || userProfileForm.get('number').dirty) && userProfileForm.get('number').errors }"
+                                    formControlName="number" pInputText>
+                                    <div *ngIf="(userProfileForm.get('number')?.touched || userProfileForm.get('number')?.dirty) && userProfileForm.get('number')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                        Contact Number is required
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                Gender: 
+                                <span class="md-inputfield">
+                                    <select formControlName="gender"
+                                    [ngClass]="{'ng-dirty ng-invalid': (userProfileForm.get('gender').touched || userProfileForm.get('gender').dirty) && userProfileForm.get('gender').errors }"
+                                    pInputText>
+                                        <option value="M">Male</option>
+                                        <option value="F">Female</option>
+                                        <option value="U">Prefer not to tell</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-6">
+                    <!-- Bday Infos -->
+                    <div class="card card-w-title shadow-box ui-shadow-3" formGroupName="birthdayGroup">
+                        <h1>Birthday</h1>
+                        <div class="ui-g form-group">
+                            <div class="ui-g-12 ui-md-4">
+                                Month: 
+                                <span class="md-inputfield">
+                                    <select formControlName="month"
+                                    [ngClass]="{'ng-dirty ng-invalid': (userProfileForm.get('birthdayGroup.month').touched || userProfileForm.get('birthdayGroup.month').dirty) && userProfileForm.get('birthdayGroup.month').errors }"
+                                    pInputText>
+                                        <option value="January">January</option>
+                                        <option value="February">February</option>
+                                        <option value="March">March</option>
+                                        <option value="April">April</option>
+                                        <option value="May">May</option>
+                                        <option value="June">June</option>
+                                        <option value="July">July</option>
+                                        <option value="August">August</option>
+                                        <option value="September">September</option>
+                                        <option value="October">October</option>
+                                        <option value="November">November</option>
+                                        <option value="December">December</option>
+                                        <option value="U" disabled>Please Select a Month</option>
+                                    </select>   
+                                    <div *ngIf="(userProfileForm.get('birthdayGroup.month')?.touched || userProfileForm.get('birthdayGroup.month')?.dirty) && userProfileForm.get('birthdayGroup.month')?.errors?.notdate" class="ui-message ui-messages-error ui-corner-all">
+                                        Birth month is required
+                                    </div>                   
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                Day: 
+                                <span class="md-inputfield">
+                                    <select formControlName="day" 
+                                    [ngClass]="{'ng-dirty ng-invalid': (userProfileForm.get('birthdayGroup.day').touched || userProfileForm.get('birthdayGroup.day').dirty) && userProfileForm.get('birthdayGroup.day').errors }"
+                                    pInputText>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                        <option value="26">26</option>
+                                        <option value="27">27</option>
+                                        <option value="28">28</option>
+                                        <option value="29">29</option>
+                                        <option value="30">30</option>
+                                        <option value="31">31</option>
+                                        <option value="U" disabled>Please Select a Day</option>
+                                    </select>
+                                    <div *ngIf="(userProfileForm.get('birthdayGroup.day')?.touched || userProfileForm.get('birthdayGroup.day')?.dirty) && userProfileForm.get('birthdayGroup.day')?.errors?.notdate" class="ui-message ui-messages-error ui-corner-all">
+                                        Birth date is required
+                                    </div>                        
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                Year: 
+                                <span class="md-inputfield">
+                                    <input type="number" 
+                                    [ngClass]="{'ng-dirty ng-invalid': (userProfileForm.get('birthdayGroup.year').touched || userProfileForm.get('birthdayGroup.year').dirty) && userProfileForm.get('birthdayGroup.year').errors }"
+                                    formControlName="year" pInputText>
+                                    <div *ngIf="(userProfileForm.get('birthdayGroup.year')?.touched || userProfileForm.get('birthdayGroup.year')?.dirty) && userProfileForm.get('birthdayGroup.year')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                        Year is required
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                Age: 
+                                <span class="md-inputfield">
+                                    <input type="text"
+                                    formControlName="age" pInputText>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <!-- Address Infos -->
+                <div class="card card-w-title shadow-box ui-shadow-3" formGroupName="addressGroup">
+                    <h1>Address</h1>
+                    <div class="ui-g form-group">
+                        <div class="ui-g-12 ui-md-4">
+                            Street / Home Address: 
+                            <span class="md-inputfield">
+                                <input type="text" 
+                                [ngClass]="{'ng-dirty ng-invalid': (userProfileForm.get('addressGroup.addst').touched || userProfileForm.get('addressGroup.addst').dirty) && userProfileForm.get('addressGroup.addst').errors }"
+                                pInputText
+                                formControlName="addst" />   
+                                <div *ngIf="(userProfileForm.get('addressGroup.addst')?.touched || userProfileForm.get('addressGroup.addst')?.dirty) && userProfileForm.get('addressGroup.addst')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                    Street / Home Address is required
+                                </div>                     
+                            </span>
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            Barangay:
+                            <span class="md-inputfield">
+                                <input type="text" 
+                                [ngClass]="{'ng-dirty ng-invalid': (userProfileForm.get('addressGroup.addbrgy').touched || userProfileForm.get('addressGroup.addbrgy').dirty) && userProfileForm.get('addressGroup.addbrgy').errors }"
+                                pInputText
+                                formControlName="addbrgy" />
+                                <div *ngIf="(userProfileForm.get('addressGroup.addbrgy')?.touched || userProfileForm.get('addressGroup.addbrgy')?.dirty) && userProfileForm.get('addressGroup.addbrgy')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                    Barangay Address is required
+                                </div>  
+                            </span>
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            City / Municipality: 
+                            <span class="md-inputfield">
+                                <input type="text" 
+                                [ngClass]="{'ng-dirty ng-invalid': (userProfileForm.get('addressGroup.addcity').touched || userProfileForm.get('addressGroup.addcity').dirty) && userProfileForm.get('addressGroup.addcity').errors }"
+                                pInputText
+                                formControlName="addcity" />
+                                <div *ngIf="(userProfileForm.get('addressGroup.addcity')?.touched || userProfileForm.get('addressGroup.addcity')?.dirty) && userProfileForm.get('addressGroup.addcity')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                    City Address is required
+                                </div>  
+                            </span>
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            Region: 
+                            <span class="md-inputfield">
+                                <input type="text" 
+                                [ngClass]="{'ng-dirty ng-invalid': (userProfileForm.get('addressGroup.addregion').touched || userProfileForm.get('addressGroup.addregion').dirty) && userProfileForm.get('addressGroup.addregion').errors }"
+                                pInputText
+                                formControlName="addregion" />
+                                <div *ngIf="(userProfileForm.get('addressGroup.addregion')?.touched || userProfileForm.get('addressGroup.addregion')?.dirty) && userProfileForm.get('addressGroup.addregion')?.errors?.required" class="ui-message ui-messages-error ui-corner-all">
+                                    City Address is required
+                                </div>  
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <button type="submit" [disabled]="!userProfileForm.valid || userProfileForm.pristine" label="Save Changes" pButton></button>
+        </form>
+    </div>
+</div>

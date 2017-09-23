@@ -1,0 +1,286 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card">
+            <div class="ui-g">
+                <div class="ui-g-4">
+                    <div class="ui-fluid">
+                        <p-listbox [options]="venueOpts" [(ngModel)]="selectedVenue" (onChange)="_getVenueEventsList($event)"></p-listbox> <br>
+                        <div *ngIf="selectedVenue === 'master'">
+                            <p-panel header="Schedule of Events ({{_selectedVenueEventsMaster.count}})" [toggleable]="true">
+                                <div style="overflow-y: scroll; height:250px; background-color:#F7F7F7 !important; padding: 5px !important;">
+                                    <div *ngFor="let v_event of _selectedVenueEventsMaster.venue_scheds" class="card" style="padding-bottom: 5px !important;">
+                                        <h4>
+                                            {{v_event.event_title}} <br>
+                                            <small>{{v_event.event_date_type}}</small>
+                                        </h4>
+                                        <div *ngFor="let v_dates of v_event.event_date_time" class="card" style="background-color:#F7F7F7 !important;">
+                                            {{v_dates.event_date | date: 'fullDate'}} <br>
+                                            From {{v_dates.event_date + 'T' + v_dates.event_time_from | date: 'shortTime'}} <br>
+                                            To {{v_dates.event_date + 'T' + v_dates.event_time_to | date: 'shortTime'}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-panel>
+                        </div>
+                        <div *ngIf="!(selectedVenue === 'master')">
+                            <p-panel header="Schedule of Events ({{_selectedVenueEvents.count}})" [toggleable]="true">
+                                <div style="overflow-y: scroll; height:250px; background-color:#F7F7F7 !important; padding: 5px !important;">
+                                    <div *ngFor="let v_event of _selectedVenueEvents.venue_scheds" class="card" style="padding-bottom: 5px !important;">
+                                        <h4>
+                                            {{v_event.event_title}} <br>
+                                            <small>{{v_event.event_date_type}}</small>
+                                        </h4>
+                                        <div *ngFor="let v_dates of v_event.event_date_time" class="card" style="background-color:#F7F7F7 !important;">
+                                            {{v_dates.event_date | date: 'fullDate'}} <br>
+                                            From {{v_dates.event_date + 'T' + v_dates.event_time_from | date: 'shortTime'}} <br>
+                                            To {{v_dates.event_date + 'T' + v_dates.event_time_to | date: 'shortTime'}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-panel>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-8">
+                    <div class="card">
+                        <div class="ui-fluid">
+                            <p-schedule [events]="events" [header]="headerConfig"></p-schedule>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p-dataTable #dtm *ngIf="selectedVenue === 'master'" 
+                    exportFilename="venue_sched_master"
+                    [value]="_selectedVenueEventsMaster.venue_scheds" 
+                    sortMode="multiple" 
+                    selectionMode="single" [contextMenu]="cm" [(selection)]="selectedEventData"
+                    [rows]="5" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]">
+                    <p-header>
+                        <div class="ui-helper-clearfix">
+                            (right click on a row to show context menu)
+                            <button type="button" pButton icon="ui-icon-file-download" iconPos="left" label="CSV" (click)="dtm.exportCSV()" style="float:left"></button>
+                        </div>
+                    </p-header>
+                        <p-column field="event_title" header="Title" [filter]="true" filterPlaceholder="Search"></p-column>
+                        <p-column field="event_type" header="Type" [filter]="true" filterPlaceholder="Search"></p-column>
+                        <p-column field="no_expected_attnd" header="Expected Attendees" [sortable]="true" ></p-column>
+                        <p-column field="guests_types" header="Guest Types"></p-column>
+                        <p-column field="event_date_type" header="Frequency"></p-column>
+                        <p-column field="createdAt" header="Date Created" [sortable]="true">
+                            <ng-template let-col let-dte="rowData" pTemplate="body">
+                                <span [style.color]="_selectedVenueEventsMaster.venue_scheds[col.field]">{{dte[col.field] | date : 'medium'}}</span>
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+
+                    <p-dataTable #dt *ngIf="!(selectedVenue === 'master')" 
+                    [value]="_selectedVenueEvents.venue_scheds" 
+                    exportFilename="venue_sched"
+                    sortMode="multiple" 
+                    selectionMode="single" [contextMenu]="cm" [(selection)]="selectedEventData"
+                    [rows]="5" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]">
+                    <p-header>
+                        <div class="ui-helper-clearfix">
+                            (right click on a row to show context menu)
+                            <button type="button" pButton icon="ui-icon-file-download" iconPos="left" label="CSV" (click)="dt.exportCSV()" style="float:left"></button>
+                        </div>
+                    </p-header>
+                        <p-column field="event_title" header="Title" [filter]="true" filterPlaceholder="Search"></p-column>
+                        <p-column field="event_type" header="Type" [filter]="true" filterPlaceholder="Search"></p-column>
+                        <p-column field="no_expected_attnd" header="Expected Attendees" [sortable]="true" ></p-column>
+                        <p-column field="guests_types" header="Guest Types"></p-column>
+                        <p-column field="event_date_type" header="Frequency"></p-column>
+                        <p-column field="createdAt" header="Date Created" [sortable]="true">
+                            <ng-template let-col let-dte="rowData" pTemplate="body">
+                                <span [style.color]="_selectedVenueEvents.venue_scheds[col.field]">{{dte[col.field] | date : 'medium'}}</span>
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<p-dialog header="{{selectedEventDetails.event_title}} details" [(visible)]="viewDetails" modal="modal" width="800" [responsive]="true">
+    <div class="ui-fluid">
+        <div class="ui-g">  
+            <div class="ui-g-12">
+                <div class="card" style="overflow-y: scroll; height:400px;">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card">
+                                <h3>Event Details</h3>
+                                <p>
+                                    <strong>Event Title: </strong> {{selectedEventDetails.event_title}} <br>
+                                    <strong>Event Type: </strong> {{selectedEventDetails.event_type}} <br>
+                                    <strong>Description: </strong> {{selectedEventDetails.event_desc}} <br>
+                                    <strong>Guests types: </strong> {{selectedEventDetails.guests_types}} <br>
+                                </p> 
+                                <p>
+                                    <strong>{{selectedEventDetails.event_date_type}}</strong> <br>
+                                    <span *ngFor="let e_date of selectedEventDetails.event_date_time">
+                                        <strong>{{e_date.event_date | date: 'fullDate'}}</strong> ({{e_date.event_date + 'T' + e_date.event_time_from | date: 'mediumTime'}} - {{e_date.event_date + 'T' + e_date.event_time_to | date: 'mediumTime'}})
+                                        <br>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-12">
+                            <div class="card">
+                                <div class="ui-g">
+                                    <h3>Looker Details</h3>
+                                    <div class="ui-g-12" *ngIf="loadingDetails; else notLoadingDet">
+                                        <h2>Loading...</h2>
+                                    </div>
+                                    <ng-template #notLoadingDet>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-3" *ngIf="viewDetails && !(selectedLookerDetails.img_url ==='default')">
+                                                <img src="{{buildLookerImgSrc(selectedLookerDetails.img_url)}}" style="height: 100px !important;width: 100%; object-fit:cover !important; border-radius: 2%;" alt="">
+                                            </div>
+                                            <div class="ui-g-9">
+                                                <p>{{selectedLookerDetails.fullname}} <br>
+                                                {{selectedLookerDetails.email}} <br>
+                                                {{selectedLookerDetails.number}} <br>
+                                                Member Since: {{selectedLookerDetails.createdAt | date}}</p>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-12">
+                            <div class="card">
+                                <div class="ui-g">
+                                    <h3>Venue Details</h3>
+                                    <div class="ui-g-12" *ngIf="loadingDetails; else notLoadingDetVenue">
+                                        <h2>Loading...</h2>
+                                    </div>
+                                    <ng-template #notLoadingDetVenue>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-12">
+                                                <div class="ui-g-5" *ngIf="viewDetails">
+                                                    <img *ngIf="selectedVenueDetails.img_url === 'default'" src="assets/layout/images/dark-user-bg.png" style="height: 100px !important;width: 100%; object-fit:cover !important; border-radius: 2%;">
+                                                    <img *ngIf="!(selectedVenueDetails.img_url === 'default')" src="{{buildVenueImgSrc(selectedVenueDetails.img_url)}}" style="height: 100px !important;width: 100%; object-fit:cover !important; border-radius: 2%;">
+                                                </div>
+                                                <div class="ui-g-7">
+                                                    <h4 style="color: #4CAF50 !important; margin-top: 10px !important; margin-bottom: 5px !important;">{{selectedVenueDetails.name}}</h4>
+                                                    <p>{{selectedVenueDetails.location}}</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="ui-g-12">
+                                                <p><strong>Availability: </strong></p>
+                                                <div *ngFor="let av of selectedVenueDetails.availability" class="card ui-g-12 shadow-box ui-shadow-2">
+                                                    {{av.dayRange}}: From: {{av.timeRangeFrom}} To: {{av.timeRangeTo}}
+                                                </div>
+                                                <p><strong>Cost(s): </strong></p>
+                                                <div *ngFor="let cost of selectedVenueDetails.costs" class="card ui-g-12 shadow-box ui-shadow-2">
+                                                    {{cost.cur}} {{cost.value}} per {{cost.unit}}
+                                                </div>
+                                                <hr>
+                                                <p-accordion>
+                                                    <p-accordionTab header="Reservation Policy">
+                                                        <p>{{selectedVenueDetails.reservation_policy}}</p>
+                                                    </p-accordionTab>
+                                                    <p-accordionTab header="Features">
+                                                        <div class="ui-g">
+                                                            <div *ngFor="let feat of selectedVenueDetails.features" class="card shadow ui-shadow-2 ui-g-12 ui-md-6 ui-lg-6">
+                                                                {{feat}}
+                                                            </div> 
+                                                        </div>
+                                                    </p-accordionTab>
+                                                    <p-accordionTab header="Venue Type(s)">
+                                                        <div class="ui-g">
+                                                            <div *ngFor="let vtype of selectedVenueDetails.venue_type" class="card shadow ui-shadow-2 ui-g-12 ui-md-6 ui-lg-6">
+                                                                {{vtype}}
+                                                            </div>  
+                                                        </div>
+                                                    </p-accordionTab>
+                                                </p-accordion>
+                                            </div>                                              
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <p-footer>
+        <button type="button" pButton icon="fa-close" (click)="viewDetails=false" label="Close"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="{{selectedPaymentEvent}} Payments" [(visible)]="viewPayments" modal="modal" width="800" [responsive]="true">
+    <div class="ui-fluid">
+        <div class="ui-g">  
+            <div class="ui-g-12">
+                <div class="card" style="overflow-y: scroll; height:400px;">
+                    <div class="ui-g">
+                        <div class="ui-g-12" *ngIf="loadingPayments; else notLoadingPay" style="text-align: center !important; color: #4F4F4F !important;">
+                            <h2>Loading...</h2>
+                        </div>
+                        <ng-template #notLoadingPay>
+                            <div class="ui-g-12" *ngIf="selectedEventPrs?.payment_reqs?.length > 0; else noPrs">
+                                <h3>Pament Request(s)</h3>
+                                <div class="card" *ngFor="let payment_req of selectedEventPrs.payment_reqs">
+                                    <div class="ui-g">
+                                        <p>
+                                            <strong>Amount: </strong> {{payment_req.amount | currency: 'PHP'}} <br>
+                                            <strong>Status: </strong> {{payment_req.payment_req_stat}} <br>
+                                            <strong>Options: </strong> {{payment_req.payment_opts}} <br>
+                                            <strong>Inclusions: </strong> {{payment_req.inclusions}} <br>
+                                            <strong>Date Created: </strong> {{payment_req.createdAt | date: 'fullDate'}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <h3>Pament Info(s)</h3>
+                                <div class="card" *ngFor="let payment_inf of PaymentInfoList">
+                                    <div class="ui-g">
+                                        <p>
+                                            <strong>Date Created: </strong> {{payment_inf.createdAt | date: 'fullDate'}} <br>
+                                            <strong>Amount: </strong> {{payment_inf.amount | currency: 'PHP'}} <br>
+                                            <strong>Reference: </strong> {{payment_inf.reference}} <br>
+                                            <strong>image Reference(s): </strong><br>
+                                        </p>
+                                        <div class="ui-g-12" *ngIf="payment_inf?.img_reference?.length > 0; else noImgref">
+                                            <div class="ui-g-6" *ngFor="let imgRef of payment_inf.img_reference">
+                                                <img src="{{buildRefImgSrc(imgRef)}}" alt="" style="width: 100% !important;">
+                                            </div>
+                                        </div>
+                                        <ng-template #noImgref>
+                                            <div class="ui-g-12">
+                                                <h4>No Included Image Reference(s)</h4>
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-template #noPrs>
+                                <div class="ui-g-12" style="text-align: center !important; color: #4F4F4F !important;">
+                                    <h1>No Issued Payment Requests for this event</h1>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <p-footer>
+        <button type="button" pButton icon="fa-close" (click)="viewPayments=false" label="Close"></button>
+    </p-footer>
+</p-dialog>

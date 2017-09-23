@@ -1,0 +1,30 @@
+.ui-md-6 > p .presreq {
+    color: #4CAF50 !important;
+}
+
+.vn-not-selected-yet {
+    background: #F7F7F7;
+    border: 2px dashed #d1d1d1;
+    color: #c2c2c2 !important;
+    height: 250px;
+    text-align: center;
+    padding-top: 150px;
+}
+
+.vn-not-selected-yet-sides {
+    background: #F7F7F7;
+    border: 2px dashed #d1d1d1;
+    color: #c2c2c2 !important;
+    height: 187px;
+    text-align: center;
+    padding-top: 112px;
+}
+
+.vn-not-selected-yet-sides-look {
+    background: #F7F7F7;
+    border: 2px dashed #d1d1d1;
+    color: #c2c2c2 !important;
+    height: 62px;
+    text-align: center;
+    padding-top: 10px;
+}

@@ -1,0 +1,29 @@
+<div class="card shadow-box ui-shadow-2 vn-card-colored">
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div *ngIf="venues.length < 1" class="ui-g-12">
+                <h1 class="vn-no-venue-ind">No Venues to show</h1>
+                <a [routerLink]="['../', 'add']"><button pButton type="button" label="Add A Venue" icon="ui-icon-add-location" class="green-btn"></button></a>
+            </div>
+        </div>
+        <div *ngFor="let venue of venues" class="ui-g-12 ui-md-4 ui-lg-4">
+            <a class="vn-link" (click)="goToVenueDetail(venue._id)">
+                <div class="card vn-list-card">
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-5 ui-lg-5" *ngIf="venue.img_url === 'default'">
+                            <img class="vn-img-thumb" src="assets/layout/images/dark-user-bg.png" alt="default image">
+                        </div>
+                        <div class="ui-g-12 ui-md-5 ui-lg-5" *ngIf="!(venue.img_url === 'default')">
+                            <img class="vn-img-thumb" src="{{buildVenueThumb(venue.img_url)}}" alt="default image">
+                        </div>
+                        <div class="ui-g-12 ui-md-7 ui-lg-7">
+                            <h3 class="vn-name">{{venue?.name | slice:0:13}}<span *ngIf="venue?.name?.length > 13">...</span></h3>
+                            <h5 class="vn-location">{{venue?.location}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</div>

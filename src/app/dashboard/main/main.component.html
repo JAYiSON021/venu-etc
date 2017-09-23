@@ -1,0 +1,86 @@
+<div class="ui-g dashboard">
+    <div class="ui-g-12 ui-md-4">
+        <div class="card overview">
+            <div class="overview-content clearfix">
+                <span class="overview-title">Total Payments</span>
+                <span class="overview-detail">{{totalPayment | currency: 'Php'}}</span>
+            </div>
+            <div class="overview-footer">
+                <img src="assets/layout/images/dashboard/sales.svg" style="width: 100%" />
+            </div>
+        </div>
+    </div>
+    <div class="ui-g-12 ui-md-4">
+        <div class="card overview">
+            <div class="overview-content clearfix">
+                <span class="overview-title">Total Events</span>
+                <span class="overview-detail">{{_selectedVenueEventsMaster.count}}</span>
+            </div>
+            <div class="overview-footer">
+                <img src="assets/layout/images/dashboard/views.svg" style="width: 100%" />
+            </div>
+        </div>
+    </div>
+    <div class="ui-g-12 ui-md-4">
+        <div class="card overview">
+            <div class="overview-content clearfix">
+                <span class="overview-title">Unsettled Tasks</span>
+                <span class="overview-detail"> {{taskUnDone}} </span>
+            </div>
+            <div class="overview-footer">
+                <img src="assets/layout/images/dashboard/progress.svg" style="width: 100%" />
+            </div>
+        </div>
+    </div>
+    
+    <div class="ui-g-12 ui-md-6 ui-lg-4">
+        <div class="ui-g card colorbox colorbox-1">
+            <div class="ui-g-4">
+                <i class="material-icons">check_circle</i>
+            </div>
+            <div class="ui-g-8">
+                <span class="colorbox-name">Finished Tasks</span>
+                <span class="colorbox-count">{{taskDone}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="ui-g-12 ui-md-6 ui-lg-4">
+        <div class="ui-g card colorbox colorbox-2">
+            <div class="ui-g-4">
+                <i class="material-icons">shopping_card</i>
+            </div>
+            <div class="ui-g-8">
+                <span class="colorbox-name">Today's Events</span>
+                <span class="colorbox-count">{{_todayEventsMaster.count}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="ui-g-12 ui-md-6 ui-lg-4">
+        <div class="ui-g card colorbox colorbox-3">
+            <div class="ui-g-4">
+                <i class="material-icons">report</i>
+            </div>
+            <div class="ui-g-8">
+                <span class="colorbox-name">Book Requests</span>
+                <span class="colorbox-count">{{reservationReq.count}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-g-12 ui-md-7 ui-lg-7">
+        <div class="card">
+            <div class="ui-fluid">
+                <p-schedule [events]="events" [header]="headerConfig"></p-schedule>
+            </div>
+        </div>
+    </div>
+    
+    <div class="ui-g-12 ui-md-5 ui-lg-5 task-list">
+        <div class="card" *ngIf="taskDataLoaded">
+            <div class="ui-fluid">
+                <p-chart type="pie" [data]="taskData"></p-chart>
+            </div>
+        </div>
+    </div>
+    
+</div>

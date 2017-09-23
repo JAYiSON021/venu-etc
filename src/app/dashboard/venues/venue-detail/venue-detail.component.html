@@ -1,0 +1,178 @@
+<p-growl [value]="msgs"></p-growl>
+<div class="ui-g">
+    <!-- {{ venue | json}}  -->
+    <div class="ui-g-12">
+        <div class="card card-w-title vn-card shadow-box ui-shadow-2">
+            <div class="ui-g">
+                <div class="ui-g-12 ui-fluid">
+                    <div class="ui-g-12">
+                        <div class="ui-g-12 ui-md-9 ui-lg-8 vn-vdc-texts">
+                            <h1 class="vn-vdc-name">{{venue?.name | uppercase}}</h1><hr style="border-color:lightgreen !important;">
+                            <h3 class="vn-vdc-loc">{{venue?.location}}</h3>
+                            <p class="vn-vdc-en"><strong>Max: </strong>{{venue?.capacity?.max}} guests, <strong>Min: </strong>{{venue?.capacity?.min}} guests</p>
+                            <p><span *ngIf="venue.enabled" class="vn-vdc-en">Enabled:</span> <span *ngIf="!venue.enabled" class="vn-vdc-en">Disabled:</span>  <p-inputSwitch (click)="enableDisable(venue.enabled)" class="vn-vdn-en-sw" [(ngModel)]="venue.enabled"></p-inputSwitch></p>
+                        </div>
+                        <div class="ui-g-12 ui-md-3 ui-lg-4">
+                        <div class="container">
+                            <img src="{{venueThumbnail}}" class="image">
+                            <div class="middle">
+                                <div class="text" (click)="displayCP = true" >Change Thumbnail</div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 vn-vdc-ov">
+                        <hr>
+                        <p class="vn-vdc-overview">{{venue?.overview}}</p>
+                    </div>
+                    
+                </div>
+                <div class="ui-g-12">
+                    <p-toolbar>
+                        <div class="ui-toolbar-group-left">
+                            <a [routerLink]="['../../', 'new']"><button pButton type="button" label="New Venue" icon="ui-icon-plus" class="green-btn"></button></a>
+                            <button (click)="onNavigateEdit()" pButton type="button" label="Edit Venue" icon="ui-icon-edit" class="orange-btn"></button>
+                            <button pButton type="button" (click)="displayDeleteDialog=true" label="Delete Venue" icon="ui-icon-delete" class="red-btn"></button>
+                            <a [routerLink]="['../../', 'do', 'list']"><button pButton type="button" label="Back to Lists" icon="ui-icon-format-list-bulleted" class="yellow-btn"></button></a>
+                        </div>
+                    </p-toolbar>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-g-12">
+        <div class="card card-w-title shadow-box ui-shadow-2">
+            <h1 class="vn-vdc-more">More {{venue?.name}} details</h1>
+            
+            <p-tabView>
+                <p-tabPanel header="Overview &amp; Reservation Policy/Rules">
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-6 ui-lg-6">
+                            <p-panel header="Overview:">
+                                {{venue?.overview}}
+                            </p-panel>
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6">
+                            <p-panel header="Reservation Policy/Rules: ">
+                                {{venue?.reservation_policy}}
+                            </p-panel>
+                        </div>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Venue Categories &amp; Features">
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-6 ui-lg-6">
+                            <p-panel header="Venue Categories">
+                                <div class="ui-g">
+                                    <div *ngFor="let cat of venue?.venue_type" class="ui-g-12 ui-md-12 ui-lg-6">
+                                        <div class="vn-card-in card shadow ui-shadow-2">
+                                            {{cat}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-panel>
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6">
+                            <p-panel header="Venue Features">
+                                <div class="ui-g">
+                                    <div *ngFor="let feat of venue?.features" class="ui-g-12 ui-md-12 ui-lg-6">
+                                        <div class="vn-card-in card shadow ui-shadow-2">
+                                            {{feat}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-panel>
+                        </div>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Venue Cost(s) and Availability">
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-6 ui-lg-6">
+                            <div *ngIf="costs.length < 1" class="no-costs">
+                                <h4>Venue Costs is not indicated</h4>
+                            </div>
+                            <p-panel *ngIf="costs.length" header="Venue Cost(s)">
+                                <div class="ui-g">
+                                    <div *ngFor="let cost of costs" class="card ui-g-12 shadow-box ui-shadow-2">
+                                        {{cost.cur}} {{cost.value}} per {{cost.unit}}
+                                    </div>
+                                </div>
+                            </p-panel>
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6">
+                            <div *ngIf="av.length < 1" class="no-availability">
+                                <h4>Venue Availability is not indicated</h4>
+                            </div>
+                            <p-panel *ngIf="av.length" header="Venue Availability">
+                                <div class="ui-g">
+                                    <div *ngFor="let av of venue?.availability" class="card ui-g-12 shadow-box ui-shadow-2">
+                                        {{av.dayRange}}: From: {{av.timeRangeFrom}} To: {{av.timeRangeTo}}
+                                    </div>
+                                </div>
+                            </p-panel>
+                        </div>
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+    </div>
+
+    <div class="ui-g-12">
+        <div class="card card-w-title shadow-box ui-shadow-2">
+            <h1>Venue Gallery</h1>
+            <div class="ui-g">
+                <div class="ui-g-4">
+                    <div class="container">
+                        <img src="assets/layout/images/dark-user-bg.png" class="image">
+                        <div class="middle">
+                            <div class="text" (click)="displayGallUp = true" >Upload Gallery Picture</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-4" *ngFor="let gallimg of venue.gallery">
+                    <div class="container">
+                        <img src="{{assemBlegallImgUrl(gallimg)}}" class="image-gallery">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="venue?.name" class="ui-g-12">
+        <vn-venue-list></vn-venue-list>
+    </div>
+
+</div>
+
+<p-dialog appendTo="body" header="Delete Venue" [(visible)]="displayDeleteDialog" modal="modal" showEffect="fade" width="400">
+    <p>You are about to DELETE this venue, This can't be undone. Are you sure?</p>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa-close" (click)="displayDeleteDialog=false" label="No"></button>
+            <button type="button" pButton icon="fa-check" (click)="deleteVenue(venue._id)" label="Yes"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+
+<p-dialog appendTo="body" header="Change Venue Thumbnail" [(visible)]="displayCP" modal="modal" showEffect="fade" width="300">
+    <input type="file" (change)="fileChangeEvent($event)" placeholder="Upload file..." />
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa-close" (click)="displayCP=false" label="Cancel"></button>
+            <button [disabled]="!photo" pButton type="button" icon="fa-check" label="Upload" (click)="upload()"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog appendTo="body" header="Upload Venue Gallery" [(visible)]="displayGallUp" modal="modal" showEffect="fade" width="300">
+    <input type="file" (change)="fileChangeEventGall($event)" placeholder="Upload file..." />
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa-close" (click)="displayGallUp=false" label="Cancel"></button>
+            <button [disabled]="!photoGall" pButton type="button" icon="fa-check" label="Upload" (click)="uploadGall()"></button>
+        </div>
+    </p-footer>
+</p-dialog>
